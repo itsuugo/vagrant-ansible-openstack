@@ -81,17 +81,20 @@
         - { name: "{{ GLANCE_USER }}", password: "{{ GLANCE_PASS }}", tenant: service }
         - { name: "{{ NEUTRON_USER }}", password: "{{ NEUTRON_PASS }}", tenant: service }
         - { name: "{{ NOVA_USER }}", password: "{{ NOVA_PASS }}", tenant: service }
+        - { name: midonet, password: "{{ MIDONET_PASS }}", tenant: service }
       keystone_roles:
         - { name: admin, user: "{{ ADMIN_USER }}", tenant: admin }
         - { name: _member_, user: "{{ DEMO_USER }}", tenant: demo  }
         - { name: admin, user: "{{ GLANCE_USER }}", tenant: service  }
         - { name: admin, user: "{{ NEUTRON_USER }}", tenant: service  }
         - { name: admin, user: "{{ NOVA_USER }}", tenant: service  }
+        - { name: admin, user: midonet, tenant: service  }
       keystone_services:
         - { name: keystone, service_type: identity }
         - { name: glance, service_type: image }
         - { name: neutron, service_type: network }
         - { name: nova, service_type: compute }
+        - { name: midonet, service_type: midonet }
       keystone_endpoints:
         - service_name: keystone
           public_url: "{{ KEYSTONE_PROTOCOL }}://{{ hostvars['controller'].ansible_eth1.ipv4.address }}:{{ KEYSTONE_PORT }}/v2.0"
