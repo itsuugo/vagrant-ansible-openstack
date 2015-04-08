@@ -6,7 +6,7 @@
 
     - name: Add midonet repositories
       tasks:
-	- include: midonet/tasks/repositories.yml
+        - include: midonet/tasks/repositories.yml
 
     - name: Update apt cache
       apt: update_cache=yes cache_valid_time=7200
@@ -20,7 +20,7 @@
 
     - role: cassandra
       listen_address: "{{ ansible_eth1.ipv4.address }}"
-	
+
     - role: zookeeper
 
 - hosts: controller
@@ -202,8 +202,9 @@
       nova_port: "{{ NOVA_API_PORT }}"
       nova_user: "{{ NOVA_USER }}"
       nova_pass: "{{ NOVA_PASS }}"
+      midonet_url: "http://{{ hostvars['controller'].ansible_eth1.ipv4.address }}:8080/midonet-api"
 
-    - role: openstack-neutron_plugin_ml2
+    - role: openstack-neutron_plugin_midonet
 
     - role: openstack-horizon
 
@@ -213,7 +214,7 @@
   roles:
     - role: ntp
 
-    - role: openstack-neutron_plugin_ml2
+    - role: openstack-neutron_plugin_midonet
 
     - role: openstack-neutron_plugin_openvswitch_agent
       local_ip: "{{ ansible_eth2.ipv4.address }}"
@@ -243,7 +244,7 @@
   roles:
     - role: ntp
 
-    - role: openstack-neutron_plugin_ml2
+    - role: openstack-neutron_plugin_midonet
 
     - role: openstack-neutron_plugin_openvswitch_agent
       local_ip: "{{ ansible_eth2.ipv4.address }}"
