@@ -239,6 +239,11 @@
       rabbit_pass: "{{ RABBIT_NEUTRON_PASS }}"
       midonet_url: "http://{{ hostvars['controller'].ansible_eth1.ipv4.address }}:8080/midonet-api"
 
+    - role: midonet-midolman
+      zookeeper_hosts: "{{ hostvars['mido-nsdb1'].ansible_eth1.ipv4.address }}:2181,{{ hostvars['mido-nsdb2'].ansible_eth1.ipv4.address }}:2181,{{ hostvars['mido-nsdb3'].ansible_eth1.ipv4.address }}:2181"
+      cassandra_hosts: "{{ hostvars['mido-nsdb1'].ansible_eth1.ipv4.address }},{{ hostvars['mido-nsdb2'].ansible_eth1.ipv4.address }},{{ hostvars['mido-nsdb3'].ansible_eth1.ipv4.address }}"
+
+
 - hosts: compute_nodes
   tags:
     - compute_nodes
@@ -267,3 +272,8 @@
       nova_pass: "{{ NOVA_PASS }}"
       vncserver_proxy_address: "{{ hostvars['controller'].ansible_eth1.ipv4.address }}"
       virt_type: "{{ NOVA_VIRT_TYPE }}"
+
+    - role: midonet-midolman
+      zookeeper_hosts: "{{ hostvars['mido-nsdb1'].ansible_eth1.ipv4.address }}:2181,{{ hostvars['mido-nsdb2'].ansible_eth1.ipv4.address }}:2181,{{ hostvars['mido-nsdb3'].ansible_eth1.ipv4.address }}:2181"
+      cassandra_hosts: "{{ hostvars['mido-nsdb1'].ansible_eth1.ipv4.address }},{{ hostvars['mido-nsdb2'].ansible_eth1.ipv4.address }},{{ hostvars['mido-nsdb3'].ansible_eth1.ipv4.address }}"
+

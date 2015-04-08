@@ -15,10 +15,10 @@
   with_items:
     - section:  zookeeper
       option:   zookeper_hosts
-      value:    mido-nsdb1:2181,mido-nsdb2:2181,mido-nsdb3:2181
+      value:    "{{ zookeeper_hosts }}"
     - section:  cassandra
       option:   servers
-      value:    mido-nsdb1,mido-nsdb2,mido-nsdb3
+      value:    "{{ cassandra_hosts }}"
     - section:  cassandra
       option:   replication_factor
       value:    3
