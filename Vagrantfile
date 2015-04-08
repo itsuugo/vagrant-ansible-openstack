@@ -63,6 +63,13 @@ LIBVIRT_DRIVER = ENV['LIBVIRT_DRIVER'] || 'kvm'
 CACHE_SCOPE = ENV['CACHE_SCOPE'] || :machine
 EXTERNAL_NETWORK_IF = ENV['EXTERNAL_NETWORK_IF'] || nil
 
+cluster = {
+  "mido-nsdb1"  => { :ip => "10.1.2.101", :cpus => 1, :mem => 1024 },
+  "mido-nsdb2"  => { :ip => "10.1.2.102", :cpus => 1, :mem => 1024 },
+  "mido-nsdb3"  => { :ip => "10.1.2.103", :cpus => 1, :mem => 1024 }
+}
+
+
 Vagrant.configure('2') do |config|
   if Vagrant.has_plugin?('vagrant-cachier')
     config.cache.auto_detect = false
@@ -73,6 +80,23 @@ Vagrant.configure('2') do |config|
   config.ssh.insert_key = false
 
   config.vm.synced_folder '.', '/vagrant', disabled: true
+  # Cluster NSDB for midonet
+  cluster.each_with_index do |(hostname, info), index|
+    config.vm.define hostname do |cfg|
+
+      cfg.vm.provider :virtualbox do |vb, override|
+        override.vm.box = "trusty64"
+        override.vm.network :private_network, ip: "#{info[:ip]}"
+        override.vm.hostname = hostname
+
+        vb.name = 'vagrant-mido-' + hostname
+        vb.customize ["modifyvm", :id, "--memory", info[:mem], "--cpus", info[:cpus], "--hwvirtex", "on" ]
+      end
+
+    end # end config
+
+  end #end cluster
+
 
   # Cloud controller
   config.vm.define 'controller' do |server|
@@ -157,11 +181,14 @@ Vagrant.configure('2') do |config|
     ansible.playbook = 'playbook.yml'
     ansible.limit = 'all'
     ansible.sudo = true
-    ansible.extra_vars = { ansible_ssh_user: 'vagrant' }
+    ansible.extra_vars = {
+                ansible_ssh_user: 'vagrant',
+                 }
     ansible.groups = {
       'controller' => 'controller',
       'network' => 'network',
-      'compute_nodes' => COMPUTE_NODES.times.map { |x| "compute#{x + 1}" }
+      'compute_nodes' => COMPUTE_NODES.times.map { |x| "compute#{x + 1}" },
+      'nsdb' => cluster.keys
     }
   end
 end
