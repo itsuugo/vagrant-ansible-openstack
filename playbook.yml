@@ -214,6 +214,8 @@
       keystone_admin_token: "{{ ADMIN_TOKEN }}"
       zookeeper_hosts: "{{ hostvars['mido-nsdb1'].ansible_eth1.ipv4.address }}:2181,{{ hostvars['mido-nsdb2'].ansible_eth1.ipv4.address }}:2181,{{ hostvars['mido-nsdb3'].ansible_eth1.ipv4.address }}:2181"
 
+    - role: midonet-cli
+      nova_api_hostname: "{{ hostvars['controller'].ansible_eth1.ipv4.address }}"
 
 - hosts: network
   tags:
