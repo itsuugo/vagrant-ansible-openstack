@@ -1,0 +1,30 @@
+---
+
+- name: Installs Midolman
+  apt: name=midolman state=present update_cache=yes
+  tags: Midolman
+
+- name: Creates Midolmans's configuration file
+  ini_file: dest=/etc/midolman/midolman.conf
+	    section="{{ item.section }}"
+            option="{{ item.option }}"
+            value="{{ item.value }}"
+  with_items:
+    - section:  zookeeper
+      option:   zookeper_hosts
+      value:    mido-nsdb1:2181,mido-nsdb2:2181,mido-nsdb3:2181
+    - section:  cassandra
+      option:   servers
+      value:    mido-nsdb1,mido-nsdb2,mido-nsdb3
+    - section:  cassandra
+      option:   replication_factor
+      value:    3
+    - section:  cassandra
+      option:   cluster
+      value:    midonet
+  notify:
+     - Restarts Midolman
+
+- name: Starts Midolman
+  service: name=midolman state=started enabled=yes
+  tags: Midolman

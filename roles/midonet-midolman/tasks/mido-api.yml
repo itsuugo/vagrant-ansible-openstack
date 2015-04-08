@@ -1,0 +1,10 @@
+---
+
+- name: Install Midonet API plugin
+  action: apt pkg=midonet-api state=installed
+  tags: Midonet-api
+
+- name: Install Tomcat
+  action: apt pkg=tomcat7 state=installed
+  tags: Midonet-api
+

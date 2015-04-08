@@ -237,6 +237,7 @@
       rabbit_hostname: "{{ hostvars['controller'].ansible_eth1.ipv4.address }}"
       rabbit_username: "{{ RABBIT_NEUTRON_USER }}"
       rabbit_pass: "{{ RABBIT_NEUTRON_PASS }}"
+      midonet_url: "http://{{ hostvars['controller'].ansible_eth1.ipv4.address }}:8080/midonet-api"
 
 - hosts: compute_nodes
   tags:

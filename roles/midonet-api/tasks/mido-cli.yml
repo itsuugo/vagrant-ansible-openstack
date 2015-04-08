@@ -1,0 +1,5 @@
+---
+
+- name: Install Midonet-CLI
+  action: apt pkg=python-midonetclient state=installed
+  tags: Midonet-cli
