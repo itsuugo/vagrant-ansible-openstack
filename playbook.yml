@@ -4,8 +4,24 @@
     - name: Set correct sudoers entry for Vagrant
       lineinfile: "dest=/etc/sudoers.d/vagrant state=present create=yes regexp='^%vagrant ' line='%vagrant ALL=(ALL) NOPASSWD: ALL' validate='visudo -cf %s'"
 
+    - name: Add midonet repositories
+      tasks:
+	- include: midonet/tasks/repositories.yml
+
     - name: Update apt cache
       apt: update_cache=yes cache_valid_time=7200
+
+
+- hosts: nsdb
+  tags:
+    - nsdb-cluster
+  roles:
+    - role: ntp
+
+    - role: cassandra
+      listen_address: "{{ ansible_eth1.ipv4.address }}"
+	
+    - role: zookeeper
 
 - hosts: controller
   tags:

@@ -77,3 +77,7 @@ NOVA_VIRT_TYPE: "qemu"
 # Midonet
 
 MIDONET_PASS: "midonet"
+
+# Cassandra node configuration values
+cluster_name: midonet
+seeds: 10.1.2.101, 10.1.2.102, 1.1.2.103
