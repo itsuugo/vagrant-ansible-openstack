@@ -8,8 +8,8 @@
   action: apt pkg=tomcat7 state=installed
   tags: Midonet-api
 
-#- name: Configure MidoNet API
-  
+- name: Configure MidoNet API
+  template: src=web.j2 dest=/usr/share/midonet-api/WEB-INF/web.xml
 
 - name: Configure Tomcat Entropy Source
   lineinfile: dest=/usr/share/tomcat7/bin/catalina.sh state=present regexp='^JAVA_OPTS' line='JAVA_OPTS="$JAVA_OPTS -Djava.security.egd=file:/dev/./urandom"'
