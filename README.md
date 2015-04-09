@@ -1,74 +1,46 @@
-OpenStack Ansible Roles Umbrella & Demo
+OpenStack Ansible Roles for Midonet
 =========
-
-**Status**
-* [![Build Status](https://travis-ci.org/dguerri/vagrant-ansible-openstack.svg?branch=master)](https://travis-ci.org/dguerri/vagrant-ansible-openstack) on master branch
-* [![Build Status](https://travis-ci.org/dguerri/vagrant-ansible-openstack.svg?branch=development)](https://travis-ci.org/dguerri/vagrant-ansible-openstack) on development branch
-
-TL;DR
-===
-[Step by step guide for Vagrant with KVM/Libvirt](docs/KVM-LibVirt.md)
 
 What is this?
 ===
 
-This repository contains a demo for the following Ansible roles:
-
-| Status   | Role / Link   |
-|--- |--- |
-| [![Build Status](https://travis-ci.org/dguerri/openstack-glance.svg?branch=master)](https://travis-ci.org/dguerri/openstack-glance) | [openstack-glance](<https://github.com/dguerri/openstack-glance>) |
-| [![Build Status](https://travis-ci.org/dguerri/openstack-horizon.svg?branch=master)](https://travis-ci.org/dguerri/openstack-horizon) | [openstack-horizon](<https://github.com/dguerri/openstack-horizon>) |
-| [![Build Status](https://travis-ci.org/dguerri/openstack-keystone.svg?branch=master)](https://travis-ci.org/dguerri/openstack-keystone) | [openstack-keystone](<https://github.com/dguerri/openstack-keystone>) |
-| [![Build Status](https://travis-ci.org/dguerri/openstack-neutron_dhcp_agent.svg?branch=master)](https://travis-ci.org/dguerri/openstack-neutron_dhcp_agent) | [openstack-neutron\_dhcp\_agent](<https://github.com/dguerri/openstack-neutron_dhcp_agent>) |
-| [![Build Status](https://travis-ci.org/dguerri/openstack-neutron_l3_agent.svg?branch=master)](https://travis-ci.org/dguerri/openstack-neutron_l3_agent) | [openstack-neutron\_l3\_agent](<https://github.com/dguerri/openstack-neutron_l3_agent>) |
-| [![Build Status](https://travis-ci.org/dguerri/openstack-neutron_plugin_ml2.svg?branch=master)](https://travis-ci.org/dguerri/openstack-neutron_plugin_ml2) | [openstack-neutron\_plugin\_ml2](<https://github.com/dguerri/openstack-neutron_plugin_ml2>) |
-| [![Build Status](https://travis-ci.org/dguerri/openstack-neutron_plugin_openvswitch_agent.svg?branch=master)](https://travis-ci.org/dguerri/openstack-neutron_plugin_openvswitch_agent) | [openstack-neutron\_plugin\_openvswitch\_agent](<https://github.com/dguerri/openstack-neutron_plugin_openvswitch_agent>) |
-| [![Build Status](https://travis-ci.org/dguerri/openstack-neutron_server.svg?branch=master)](https://travis-ci.org/dguerri/openstack-neutron_server) | [openstack-neutron\_server](<https://github.com/dguerri/openstack-neutron_server>) |
-| [![Build Status](https://travis-ci.org/dguerri/openstack-nova_api.svg?branch=master)](https://travis-ci.org/dguerri/openstack-nova_api) | [openstack-nova\_api](<https://github.com/dguerri/openstack-nova_api>) |
-| [![Build Status](https://travis-ci.org/dguerri/openstack-nova_compute.svg?branch=master)](https://travis-ci.org/dguerri/openstack-nova_compute) | [openstack-nova\_compute](<https://github.com/dguerri/openstack-nova_compute>) |
-| [![Build Status](https://travis-ci.org/dguerri/openstack-nova_conductor.svg?branch=master)](https://travis-ci.org/dguerri/openstack-nova_conductor) | [openstack-nova\_conductor](<https://github.com/dguerri/openstack-nova_conductor>) |
-| [![Build Status](https://travis-ci.org/dguerri/openstack-nova_consoleauth.svg?branch=master)](https://travis-ci.org/dguerri/openstack-nova_consoleauth) | [openstack-nova\_consoleauth](<https://github.com/dguerri/openstack-nova_consoleauth>) |
-| [![Build Status](https://travis-ci.org/dguerri/openstack-nova_novncproxy.svg?branch=master)](https://travis-ci.org/dguerri/openstack-nova_novncproxy) | [openstack-nova\_novncproxy](<https://github.com/dguerri/openstack-nova_novncproxy>) |
-| [![Build Status](https://travis-ci.org/dguerri/openstack-nova_scheduler.svg?branch=master)](https://travis-ci.org/dguerri/openstack-nova_scheduler) | [openstack-nova\_scheduler](<https://github.com/dguerri/openstack-nova_scheduler>) |
-
-By default this demo builds 4 Trusty 64 VM's using Vagrant and provisions them with Ansible to build a working (yet basic) OpenStack infrastructure.
+This repository is a fork from  so you have Openstack with Midonet
 
 
 Architecture - Network diagram
 ---
 
 ```
-    +----------------------Vagrant-Workstation----------------------+
-    |                                                               |
-    |  +---------------------------------------------------------+  |
-    |  |                Management - 10.1.2.0/24                 |  |
-    |  +---------------------------------------------------------+  |
-    |        |             |             |                 |        |
-    |        |.10          |.20          |.30              |.30+N-1 |
-    |  +-----------+ +-----------+ +-----------+     +-----------+  |
-    |  |           | |           | |           |     |           |  |
-    |  |Controller | |  Network  | | Compute1  |. . .| ComputeN  |  |
-    |  |           | |           | |           |     |           |  |
-    |  +-----------+ +-----------+ +-----------+     +-----------+  |
-    |                   |     |.5        |.6               | .6+N-1 |
-    |                   |     |          |                 |        |
-    |              +----+  +-------------------------------------+  |
-    |              |       |     Tunnels - 192.168.129.0/24      |  |
-    |              |       +-------------------------------------+  |
-    |  +----------------------------------------------+             |
-    |  |  External (Bridged to workstation network)   |             |
-    |  +----------------------------------------------+             |
-    +----------|----------------------------------------------------+
-               |                           +------+
-            +-----+                        |      +------+------+
-          +-|-----|-+                      ++                   |
-          | ||   || |-----------------------|    Internet     +-+
-          +-|-----|-+                       |                 |
-            +-----+                         +-----------+     |
-        Router (+ DHCP)                                 +-----+
++-+-------------------+Vagrant+Workstation+---------------------+                                     
+  |                                                                                                   
+  |  +---------------------------+-----------------------------+--------------------------------+     
+  |  |                Management | 10.1.2.0/24                 |                                |     
+  |  +-----+-------------+-------+-----+-----------------+-----+------------+---------------+---+     
+  |        |             |             |                 |                  |               |         
+  |        |.10          |.20          |.30              |.30+N+1           |.101           | .101+N-1
+  |  +-----------+ +-----------+ +-----------+     +-----------+       +-------+       +----+--+      
+  |  |           | |           | |           |     |           |       |       |       |       |      
+  |  |Controller | |  Network  | | Compute1  |. . .| ComputeN  |       Cluster1|       ClusterN|      
+  |  |           | |           | |           |     |           |       |       |       |       |      
+  |  +-----------+ +--+--------+ +-----------+     +-----+-----+       +-------+       +-------+      
+  |                   |     |.5        |.6               | .6+N+1                                     
+  |                   |     |          |                 |                                            
+  |              +----+  +--+----------------------------+-----+                                      
+  |              |       |     Tunnels | 192.168.129.0/24      |                                      
+  |              |       +-------------------------------------+                                      
+  |  +-----------+----------------------------------+                                                 
+  |  |  External (Bridged to workstation network)   |                                                 
+  |  +----------------------------------------------+                                                 
+  +---------------------------------------------------------------                                    
+             |                           +------+                                                     
+          +-----+                        |      +-------------+                                       
+        +---------+                      ++                   |                                       
+        | ||   || +-----------------------+    Internet     +-+                                       
+        +---------+                       |                 |                                         
+          +-----+                         +-----------+     |                                         
+      Router (+ DHCP)                                 +-----+                                         
 
 ```
-*(Drawn with Monodraw alpha, courtesy of Milen Dzhumerov)*
 
 
 Architecture - Services distribution
@@ -89,22 +61,29 @@ Architecture - Services distribution
 * Neutron Server
 * Neutron Plugin Modular Layer 2 (ML2)
 * Horizon
+* Midonet API
+* Midonet CLI
 
 **Network**
 
 * NTPd
-* Neutron Plugin Modular Layer 2 (ML2)
+* Neutron Plugin Midonet
 * Neutron Plugin OpenVSwitch agent
 * Neutron Plugin Layer 3 agent
 * Neutron Plugin DHCP agent
+* Midolman
 
 **Compute nodes**
 
 * NTPd
-* Neutron Plugin Modular Layer 2 (ML2)
+* Neutron Plugin Midonet
 * Neutron Plugin OpenVSwitch agent
 * Nova Compute
+* Midolman
 
+**Cluster nodes**
+* Zookeeper
+* Cassandra
 
 How can I use this demo?
 ===
