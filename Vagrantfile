@@ -179,6 +179,7 @@ Vagrant.configure('2') do |config|
   # Ansible provisioning
   config.vm.provision 'ansible' do |ansible|
     ansible.playbook = 'playbook.yml'
+    ansible.verbose = "vvvv"
     ansible.limit = 'all'
     ansible.sudo = true
     ansible.extra_vars = {
