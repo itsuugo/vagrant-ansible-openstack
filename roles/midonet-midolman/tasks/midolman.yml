@@ -5,11 +5,11 @@
   tags: Midolman
 
 - name: Configure Quagga
-- lineinfile: "dest=/etc/midolman/midolman.conf state=present regexp='^bgpd_binary' line='bgpd_binary = /usr/lib/quagga/'"
+  lineinfile: "dest=/etc/midolman/midolman.conf state=present regexp='^bgpd_binary' line='bgpd_binary = /usr/lib/quagga/'"
 
-- name: Creates Midolmans's configuration file
+- name: Creates Midolmans configuration file
   ini_file: dest=/etc/midolman/midolman.conf
-	    section="{{ item.section }}"
+            section="{{ item.section }}"
             option="{{ item.option }}"
             value="{{ item.value }}"
   with_items:

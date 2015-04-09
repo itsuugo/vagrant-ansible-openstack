@@ -11,8 +11,8 @@
 #- name: Configure MidoNet API
   
 
-- name: Configure Tomcat’s Entropy Source
-  lineinfile: "dest=/usr/share/tomcat7/bin/catalina.sh state=present regexp='^JAVA_OPTS' line='JAVA_OPTS="$JAVA_OPTS -Djava.security.egd=file:/dev/./urandom"'"
+- name: Configure Tomcat Entropy Source
+  lineinfile: dest=/usr/share/tomcat7/bin/catalina.sh state=present regexp='^JAVA_OPTS' line='JAVA_OPTS="$JAVA_OPTS -Djava.security.egd=file:/dev/./urandom"'
   notify: Restart Tomcat
 
 - name: Configure MidoNet API context
