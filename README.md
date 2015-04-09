@@ -95,8 +95,9 @@ How can I use this demo?
 
 Clone this repository and its submodules
 ```
-git clone https://github.com/dguerri/vagrant-ansible-openstack.git
+git clone https://github.com/itsuugo/vagrant-ansible-openstack.git
 cd vagrant-ansible-openstack/
+git branch midonet
 git submodule init
 git submodule update
 ```

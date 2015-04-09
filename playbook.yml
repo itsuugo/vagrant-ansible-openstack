@@ -186,6 +186,8 @@
       neutron_user: "{{ NEUTRON_USER }}"
       neutron_pass: "{{ NEUTRON_PASS }}"
 
+    - role: openstack-neutron_plugin_midonet
+
     - role: openstack-neutron_server
       neutron_server_hostname: "{{ ansible_eth1.ipv4.address }}"
       neutron_database_url: "mysql://{{ MYSQL_NEUTRON_USER }}:{{ MYSQL_NEUTRON_PASS }}@{{ hostvars['controller'].ansible_eth1.ipv4.address }}/{{ MYSQL_NEUTRON_DB }}"
@@ -202,8 +204,6 @@
       nova_user: "{{ NOVA_USER }}"
       nova_pass: "{{ NOVA_PASS }}"
       midonet_url: "http://{{ hostvars['controller'].ansible_eth1.ipv4.address }}:8080/midonet-api"
-
-    - role: openstack-neutron_plugin_midonet
 
     - role: openstack-horizon
 
@@ -224,12 +224,12 @@
 
     - role: openstack-neutron_plugin_midonet
 
-    - role: openstack-neutron_plugin_openvswitch_agent
-      local_ip: "{{ ansible_eth2.ipv4.address }}"
-      rabbit_hostname: "{{ hostvars['controller'].ansible_eth1.ipv4.address }}"
-      rabbit_username: "{{ RABBIT_NEUTRON_USER }}"
-      rabbit_pass: "{{ RABBIT_NEUTRON_PASS }}"
-
+#    - role: openstack-neutron_plugin_openvswitch_agent
+#      local_ip: "{{ ansible_eth2.ipv4.address }}"
+#      rabbit_hostname: "{{ hostvars['controller'].ansible_eth1.ipv4.address }}"
+#      rabbit_username: "{{ RABBIT_NEUTRON_USER }}"
+#      rabbit_pass: "{{ RABBIT_NEUTRON_PASS }}"
+#
     - role: openstack-neutron_l3_agent
       external_interface: eth3
       keystone_hostname: "{{ hostvars['controller'].ansible_eth1.ipv4.address }}"
@@ -260,11 +260,11 @@
 
     - role: openstack-neutron_plugin_midonet
 
-    - role: openstack-neutron_plugin_openvswitch_agent
-      local_ip: "{{ ansible_eth2.ipv4.address }}"
-      rabbit_hostname: "{{ hostvars['controller'].ansible_eth1.ipv4.address }}"
-      rabbit_username: "{{ RABBIT_NEUTRON_USER }}"
-      rabbit_pass: "{{ RABBIT_NEUTRON_PASS }}"
+#    - role: openstack-neutron_plugin_openvswitch_agent
+#      local_ip: "{{ ansible_eth2.ipv4.address }}"
+#      rabbit_hostname: "{{ hostvars['controller'].ansible_eth1.ipv4.address }}"
+#      rabbit_username: "{{ RABBIT_NEUTRON_USER }}"
+#      rabbit_pass: "{{ RABBIT_NEUTRON_PASS }}"
 
     - role: openstack-nova_compute
       my_ip: "{{ ansible_eth1.ipv4.address }}"
