@@ -224,28 +224,21 @@
 
     - role: openstack-neutron_plugin_midonet
 
-    - role: openstack-neutron_plugin_openvswitch_agent
-      local_ip: "{{ ansible_eth2.ipv4.address }}"
-      rabbit_hostname: "{{ hostvars['controller'].ansible_eth1.ipv4.address }}"
-      rabbit_username: "{{ RABBIT_NEUTRON_USER }}"
-      rabbit_pass: "{{ RABBIT_NEUTRON_PASS }}"
-
-    - role: openstack-neutron_l3_agent
+    - role: openstack-neutron_metadata_agent
       external_interface: eth3
       keystone_hostname: "{{ hostvars['controller'].ansible_eth1.ipv4.address }}"
       nova_metadata_ip: "{{ hostvars['controller'].ansible_eth1.ipv4.address }}"
       metadata_secret: "{{ METADATA_SECRET }}"
       neutron_user: "{{ NEUTRON_USER }}"
       neutron_pass: "{{ NEUTRON_PASS }}"
-      rabbit_hostname: "{{ hostvars['controller'].ansible_eth1.ipv4.address }}"
-      rabbit_username: "{{ RABBIT_NEUTRON_USER }}"
-      rabbit_pass: "{{ RABBIT_NEUTRON_PASS }}"
 
     - role: openstack-neutron_dhcp_agent
       rabbit_hostname: "{{ hostvars['controller'].ansible_eth1.ipv4.address }}"
       rabbit_username: "{{ RABBIT_NEUTRON_USER }}"
       rabbit_pass: "{{ RABBIT_NEUTRON_PASS }}"
       midonet_url: "http://{{ hostvars['controller'].ansible_eth1.ipv4.address }}:8080/midonet-api"
+      nova_metadata_ip: "{{ hostvars['controller'].ansible_eth1.ipv4.address }}"
+      metadata_secret: "{{ METADATA_SECRET }}"
 
     - role: midonet-midolman
       zookeeper_hosts: "{{ hostvars['mido-nsdb1'].ansible_eth1.ipv4.address }}:2181,{{ hostvars['mido-nsdb2'].ansible_eth1.ipv4.address }}:2181,{{ hostvars['mido-nsdb3'].ansible_eth1.ipv4.address }}:2181"
@@ -259,12 +252,6 @@
     - role: ntp
 
     - role: openstack-neutron_plugin_midonet
-
-    - role: openstack-neutron_plugin_openvswitch_agent
-      local_ip: "{{ ansible_eth2.ipv4.address }}"
-      rabbit_hostname: "{{ hostvars['controller'].ansible_eth1.ipv4.address }}"
-      rabbit_username: "{{ RABBIT_NEUTRON_USER }}"
-      rabbit_pass: "{{ RABBIT_NEUTRON_PASS }}"
 
     - role: openstack-nova_compute
       my_ip: "{{ ansible_eth1.ipv4.address }}"
