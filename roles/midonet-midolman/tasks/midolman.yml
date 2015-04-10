@@ -14,7 +14,7 @@
             value="{{ item.value }}"
   with_items:
     - section:  zookeeper
-      option:   zookeper_hosts
+      option:   zookeeper_hosts
       value:    "{{ zookeeper_hosts }}"
     - section:  cassandra
       option:   servers
