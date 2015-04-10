@@ -139,29 +139,7 @@ or you will not be able to spawn virtual machines in your cloud.
 ***Download and install an Ubuntu box***
 
 See VagrantCloud <https://vagrantcloud.com> for a comprehensive list of vagrant boxes.
-For instance:
 
-- Parallels provider
-
-```
-vagrant box add fza/trusty64
-```
-
-- Virtualbox, VmWare desktop and Libvirt providers
-
-```
-vagrant box add breqwatr/trusty64
-```
-
-***Set `BOX_NAME` environment variable as appropriate***
-
-`BOX_NAME` defaults to `trusty64`. To use a different box:
-
-```
-export BOX_NAME="breqwatr/trusty64"
-```
-
-***Install required plugins***
 
 ```
 vagrant plugin install vagrant-cachier
