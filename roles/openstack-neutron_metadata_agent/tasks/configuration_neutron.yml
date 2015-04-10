@@ -17,13 +17,6 @@
 # limitations under the License.
 #
 
-- name: Dump service tenant id
-  shell: keystone tenant-get service | awk '/ id / {print $4}'
-  register: service_tenant_id
-  changed_when: false
-  environment: openstack_service_env
-  when: not nova_admin_tenant_id
-
 - name: Configure Neutron
   ini_file: dest=/etc/neutron/neutron.conf
             section="{{ item.section }}"
