@@ -20,19 +20,19 @@
 ##############################################################################
 
 COMPUTE_NODES = (ENV['COMPUTE_NODES'] || 2).to_i
-VAGRANT_BOX_NAME = ENV['BOX_NAME'] || 'trusty64'
-CONTROLLER_RAM = (ENV['CONTROLLER_RAM'] || 4048).to_i
-NETWORK_RAM = (ENV['NETWORK_RAM'] || 4048).to_i
-COMPUTE_RAM = (ENV['COMPUTE_RAM'] || 4048).to_i
+VAGRANT_BOX_NAME = ENV['BOX_NAME'] || 'ubuntu/trusty64'
+CONTROLLER_RAM = (ENV['CONTROLLER_RAM'] || 2048).to_i
+NETWORK_RAM = (ENV['NETWORK_RAM'] || 2048).to_i
+COMPUTE_RAM = (ENV['COMPUTE_RAM'] || 2048).to_i
 NESTED_VIRT = (ENV['NESTED_VIRT'] || 'true') == 'true'
 LIBVIRT_DRIVER = ENV['LIBVIRT_DRIVER'] || 'kvm'
 CACHE_SCOPE = ENV['CACHE_SCOPE'] || :machine
 EXTERNAL_NETWORK_IF = ENV['EXTERNAL_NETWORK_IF'] || nil
 
 cluster = {
-  "mido-nsdb1"  => { :ip => "10.1.2.101", :cpus => 4, :mem => 2024 },
-  "mido-nsdb2"  => { :ip => "10.1.2.102", :cpus => 4, :mem => 2024 },
-  "mido-nsdb3"  => { :ip => "10.1.2.103", :cpus => 4, :mem => 2024 }
+  "mido-nsdb1"  => { :ip => "10.1.2.101", :cpus => 4, :mem => 1024 },
+  "mido-nsdb2"  => { :ip => "10.1.2.102", :cpus => 4, :mem => 1024 },
+  "mido-nsdb3"  => { :ip => "10.1.2.103", :cpus => 4, :mem => 1024 }
 }
 
 
@@ -51,7 +51,7 @@ Vagrant.configure('2') do |config|
     config.vm.define hostname do |cfg|
 
       cfg.vm.provider :virtualbox do |vb, override|
-        override.vm.box = "trusty64"
+        override.vm.box = VAGRANT_BOX_NAME
         override.vm.network :private_network, ip: "#{info[:ip]}"
         override.vm.hostname = hostname
 
@@ -146,7 +146,7 @@ Vagrant.configure('2') do |config|
   config.vm.provision 'ansible' do |ansible|
     ansible.playbook = 'playbook.yml'
     ansible.verbose = "vvv"
-    #ansible.limit = 'all'
+    ansible.limit = 'all'
     ansible.sudo = true
     ansible.extra_vars = {
                 ansible_ssh_user: 'vagrant',
