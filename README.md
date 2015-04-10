@@ -252,3 +252,8 @@ http://10.1.2.10/horizon/
 ```
 
 Where `10.1.2.10` is the address of controller node.
+
+##TODO
+Fix problem with cassandra start daemon
+
+You can login and start as root from the CLI

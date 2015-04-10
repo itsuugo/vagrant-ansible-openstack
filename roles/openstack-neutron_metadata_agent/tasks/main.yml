@@ -21,6 +21,7 @@
 
 - include: packages.yml
 - include: configuration.yml
+- include: configuration_neutron.yml
 
 - meta: flush_handlers
 
