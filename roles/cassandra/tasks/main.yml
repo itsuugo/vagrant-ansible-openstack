@@ -23,6 +23,9 @@
 - action:  shell apt-mark hold dsc20 cassandra
   ignore_errors: yes
 
+- action:  shell rm -rf /var/lib/cassandra/*
+  ignore_errors: yes
+
 - name: Creates Cassandra's configuration file
   template: src=cassandra.j2 dest=/etc/cassandra/cassandra.yaml
   tags: Cassandra
