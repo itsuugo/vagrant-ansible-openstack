@@ -24,7 +24,7 @@
   ignore_errors: yes
 
 - name: Creates Cassandra's configuration file
-  template: src=cassandra.j2 dest=/etc/cassandra/cassandra.yml
+  template: src=cassandra.j2 dest=/etc/cassandra/cassandra.yaml
   tags: Cassandra
 
 - name: Restarts Cassandra
