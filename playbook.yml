@@ -187,6 +187,11 @@
       neutron_pass: "{{ NEUTRON_PASS }}"
 
     - role: openstack-neutron_plugin_midonet
+      keystone_hostname: "{{ hostvars['controller'].ansible_eth1.ipv4.address }}"
+      nova_metadata_ip: "{{ hostvars['controller'].ansible_eth1.ipv4.address }}"
+      metadata_secret: "{{ METADATA_SECRET }}"
+      neutron_user: "{{ NEUTRON_USER }}"
+      neutron_pass: "{{ NEUTRON_PASS }}"
 
     - role: openstack-neutron_server
       neutron_server_hostname: "{{ ansible_eth1.ipv4.address }}"
@@ -223,6 +228,11 @@
     - role: ntp
 
     - role: openstack-neutron_plugin_midonet
+      keystone_hostname: "{{ hostvars['controller'].ansible_eth1.ipv4.address }}"
+      nova_metadata_ip: "{{ hostvars['controller'].ansible_eth1.ipv4.address }}"
+      metadata_secret: "{{ METADATA_SECRET }}"
+      neutron_user: "{{ NEUTRON_USER }}"
+      neutron_pass: "{{ NEUTRON_PASS }}"
 
     - role: openstack-neutron_metadata_agent
       external_interface: eth3
@@ -252,6 +262,11 @@
     - role: ntp
 
     - role: openstack-neutron_plugin_midonet
+      keystone_hostname: "{{ hostvars['controller'].ansible_eth1.ipv4.address }}"
+      nova_metadata_ip: "{{ hostvars['controller'].ansible_eth1.ipv4.address }}"
+      metadata_secret: "{{ METADATA_SECRET }}"
+      neutron_user: "{{ NEUTRON_USER }}"
+      neutron_pass: "{{ NEUTRON_PASS }}"
 
     - role: openstack-nova_compute
       my_ip: "{{ ansible_eth1.ipv4.address }}"

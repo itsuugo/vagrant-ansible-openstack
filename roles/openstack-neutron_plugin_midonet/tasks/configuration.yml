@@ -19,8 +19,46 @@
 
 - name: Configure Neutron Midonet plug-in
   ini_file: dest=/etc/neutron/neutron.conf
-             section=DEFAULT
-             option=core_plugin
-             value=midonet.neutron.plugin.MidonetPluginV2
-  notify:
-    - Restart Neutron server
+            section="{{ item.section }}"
+            option="{{ item.option }}"
+            value="{{ item.value }}"
+  with_items:
+    - section:	DEFAULT
+      option:	core_plugin
+      value:	midonet.neutron.plugin.MidonetPluginV2
+    - section:  DEFAULT
+      option:   auth_strategy
+      value:    keystone
+    - section:  DEFAULT
+      option:   rpc_backend
+      value:    rabbit
+    - section:  DEFAULT
+      option:   rabbit_host
+      value:    "{{ rabbit_hostname }}"
+    - section:  DEFAULT
+      option:   rabbit_userid
+      value:    "{{ rabbit_username }}"
+    - section:  DEFAULT
+      option:   rabbit_password
+      value:    "{{ rabbit_pass }}"
+    - section:  keystone_authtoken
+      option:   auth_uri
+      value:    "{{ keystone_protocol }}://{{ keystone_hostname }}:{{ keystone_port }}"
+    - section:  keystone_authtoken
+      option:   auth_host
+      value:    "{{ keystone_hostname }}"
+    - section:  keystone_authtoken
+      option:   auth_port
+      value:    "{{ keystone_admin_port }}"
+    - section:  keystone_authtoken
+      option:   auth_protocol
+      value:    "{{ keystone_protocol }}"
+    - section:  keystone_authtoken
+      option:   admin_tenant_name
+      value:    service
+    - section:  keystone_authtoken
+      option:   admin_user
+      value:    "{{ neutron_user }}"
+    - section:  keystone_authtoken
+      option:   admin_password
+      value:    "{{ neutron_pass }}"
