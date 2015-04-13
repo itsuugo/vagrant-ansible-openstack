@@ -27,7 +27,8 @@ COMPUTE_RAM = (ENV['COMPUTE_RAM'] || 4096).to_i
 NESTED_VIRT = (ENV['NESTED_VIRT'] || 'true') == 'true'
 LIBVIRT_DRIVER = ENV['LIBVIRT_DRIVER'] || 'kvm'
 CACHE_SCOPE = ENV['CACHE_SCOPE'] || :machine
-EXTERNAL_NETWORK_IF = ENV['EXTERNAL_NETWORK_IF'] || nil
+EXTERNAL_NETWORK_IF = ENV['EXTERNAL_NETWORK_IF'] || 'veth1'
+#Fake uplink as in midonet docs
 
 cluster = {
   "mido-nsdb1"  => { :ip => "10.1.2.101", :cpus => 4, :mem => 1024 },
@@ -78,7 +79,6 @@ Vagrant.configure('2') do |config|
       server.vm.provider provider do |c|
         c.memory = CONTROLLER_RAM
         c.cpus = 4
-
         c.driver = LIBVIRT_DRIVER if provider == 'libvirt'
       end
     end
@@ -87,7 +87,6 @@ Vagrant.configure('2') do |config|
   # Network controller
   config.vm.define 'network' do |server|
     server.vm.hostname = 'network'
-
     server.vm.box = VAGRANT_BOX_NAME
 
     # Management network (eth1)
@@ -96,16 +95,17 @@ Vagrant.configure('2') do |config|
     # Tunnels network (eth2)
     server.vm.network :private_network, ip: '192.168.129.5'
 
+    # External network (eth3)
+    server.vm.network :private_network, ip: '192.168.5.5'
     # External network (eth3) - Mixed syntax to accomodate libvirt
-    server.vm.network :public_network, mode: 'passthrough',
-                                       dev: EXTERNAL_NETWORK_IF,
-                                       bridge: EXTERNAL_NETWORK_IF
+#    server.vm.network :public_network, mode: 'bridge',
+#                                       dev: EXTERNAL_NETWORK_IF,
+#					mac: 'be:5c:5f:18:a3:a4'	
 
     %w(parallels virtualbox libvirt vmware_fusion).each do |provider|
       server.vm.provider provider do |c|
         c.memory = NETWORK_RAM
         c.cpus = 4
-
         c.driver = LIBVIRT_DRIVER if provider == 'libvirt'
       end
     end
@@ -115,7 +115,6 @@ Vagrant.configure('2') do |config|
   COMPUTE_NODES.times do |number|
     config.vm.define "compute#{number + 1}" do |server|
       server.vm.hostname = "compute#{number + 1}"
-
       server.vm.box = VAGRANT_BOX_NAME
 
       # Management network (eth1)
