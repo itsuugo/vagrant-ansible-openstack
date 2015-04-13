@@ -20,7 +20,7 @@
 ##############################################################################
 
 COMPUTE_NODES = (ENV['COMPUTE_NODES'] || 2).to_i
-VAGRANT_BOX_NAME = ENV['BOX_NAME'] || 'ubuntu/trusty64'
+VAGRANT_BOX_NAME = ENV['BOX_NAME'] || 'trusty64'
 CONTROLLER_RAM = (ENV['CONTROLLER_RAM'] || 4096).to_i
 NETWORK_RAM = (ENV['NETWORK_RAM'] || 2048).to_i
 COMPUTE_RAM = (ENV['COMPUTE_RAM'] || 4096).to_i
@@ -37,6 +37,7 @@ cluster = {
 
 
 Vagrant.configure('2') do |config|
+
   if Vagrant.has_plugin?('vagrant-cachier')
     config.cache.auto_detect = false
     config.cache.enable :apt
@@ -49,15 +50,15 @@ Vagrant.configure('2') do |config|
   # Cluster NSDB for midonet
   cluster.each_with_index do |(hostname, info), index|
     config.vm.define hostname do |cfg|
+        cfg.vm.box = VAGRANT_BOX_NAME
+        cfg.vm.hostname = hostname
+        cfg.vm.network :private_network, ip: "#{info[:ip]}"
 
-      cfg.vm.provider :virtualbox do |vb, override|
-        override.vm.box = VAGRANT_BOX_NAME
-        override.vm.network :private_network, ip: "#{info[:ip]}"
-        override.vm.hostname = hostname
-
-        vb.name = 'vagrant-mido-' + hostname
-        vb.customize ["modifyvm", :id, "--memory", info[:mem], "--cpus", info[:cpus], "--hwvirtex", "on" ]
-      end
+        cfg.vm.provider :libvirt do |vb|
+           vb.memory = 1024
+           vb.cpus = 4
+           vb.driver = LIBVIRT_DRIVER 
+        end
 
     end # end config
 
