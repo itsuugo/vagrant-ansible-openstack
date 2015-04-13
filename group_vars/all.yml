@@ -71,8 +71,8 @@ MYSQL_NOVA_PASS: "peeh7shuy8Iesh8Ce5aj"
 
 # Neutron L3 agent
 
-# Nova hypervisor to use (only kvm/qemu are currently supported)
-NOVA_VIRT_TYPE: "qemu"
+# Nova hypervisor to use (only kvm/qemu/lxc are currently supported)
+NOVA_VIRT_TYPE: "kvm"
 
 # Midonet
 
